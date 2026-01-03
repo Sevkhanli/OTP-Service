@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Melisa - Onlayn Aptek</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Rubik:400,700|Crimson+Text:400,400i" rel="stylesheet">
+
+    <link rel="stylesheet" href="/front/fonts/icomoon/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="/front/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/front/css/magnific-popup.css">
+    <link rel="stylesheet" href="/front/css/jquery-ui.css">
+    <link rel="stylesheet" href="/front/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/front/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/front/css/aos.css">
+    <link rel="stylesheet" href="/front/css/style.css">
+
+    <style>
+        /* İkonların bir xətt üzrə və səliqəli görünməsi üçün kiçik tənzimləmə */
+        .user_option {
+            display: flex;
+            align-items: center;
+        }
+        .user_link {
+            margin-left: 15px;
+            color: #202020;
+            transition: 0.3s;
+        }
+        .user_link:hover {
+            color: #75b239; /* Pharma yaşılı */
+        }
+        .logout-btn {
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #202020;
+            padding: 0;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="site-wrap">
+
+    <div class="site-navbar py-2">
+        <div class="search-wrap">
+            <div class="container">
+                <a href="#" class="search-close js-search-close"><span class="icon-close2"></span></a>
+                <form action="#" method="get">
+                    <input type="text" name="query" class="form-control" placeholder="Məhsul axtar...">
+                </form>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between">
+
+                <div class="logo">
+                    <div class="site-logo">
+                        <a th:href="@{/}" class="js-logo-clone">Melisa</a>
+                    </div>
+                </div>
+
+                <div class="main-nav d-none d-lg-block">
+                    <nav class="site-navigation text-right text-md-center" role="navigation">
+                        <ul class="site-menu js-clone-nav d-none d-lg-block">
+                            <li class="active"><a th:href="@{/}">Ana Səhifə</a></li>
+                            <li><a th:href="@{/store}">Mağaza</a></li>
+                            <li><a th:href="@{/about}">Haqqımızda</a></li>
+                            <li><a th:href="@{/contact}">Əlaqə</a></li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="icons d-flex align-items-center">
+
+                    <a href="#" class="icons-btn d-inline-block js-search-open"><span class="icon-search"></span></a>
+
+                    <a th:href="@{/cart}" class="icons-btn d-inline-block bag mr-3">
+                        <span class="icon-shopping-bag"></span>
+                        <span class="number">2</span> </a>
+
+                    <div class="user_option">
+
+                        <th:block sec:authorize="isAnonymous()">
+                            <a th:href="@{/register}" class="user_link" title="Qeydiyyat">
+                                <i class="fa fa-user-plus" style="font-size: 18px;"></i>
+                            </a>
+                            <a th:href="@{/login}" class="user_link" title="Daxil Ol">
+                                <i class="fa fa-sign-in" style="font-size: 18px;"></i>
+                            </a>
+                        </th:block>
+
+                        <th:block sec:authorize="isAuthenticated()">
+                            <a th:href="@{/profile}" class="user_link"
+                               style="color: #75b239; font-weight: bold; font-size: 14px;" title="Şəxsi Kabinet">
+                                <span sec:authentication="name"></span>
+                            </a>
+
+                            <form th:action="@{/logout}" method="post" style="display: inline; margin-left: 10px;">
+                                <button type="submit" class="logout-btn" title="Çıxış">
+                                    <i class="fa fa-sign-out"></i>
+                                </button>
+                            </form>
+                        </th:block>
+
+                    </div>
+
+                    <a href="#" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none">
+                        <span class="icon-menu"></span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div layout:fragment="content">
+    </div>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+                    <div class="block-7">
+                        <h3 class="footer-heading mb-4">Haqqımızda</h3>
+                        <p>Melisa Aptek olaraq sizə ən keyfiyyətli tibbi ləvazimatları təqdim edirik.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 mx-auto mb-5 mb-lg-0">
+                    <h3 class="footer-heading mb-4">Linklər</h3>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Vitaminlər</a></li>
+                        <li><a href="#">Diyetik qidalar</a></li>
+                        <li><a href="#">Çaylar</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="block-5 mb-5">
+                        <h3 class="footer-heading mb-4">Əlaqə</h3>
+                        <ul class="list-unstyled">
+                            <li class="address">Bakı şəhəri, Azərbaycan</li>
+                            <li class="phone"><a href="tel://994500000000">+994 50 000 00 00</a></li>
+                            <li class="email">info@melisa.com</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script src="/front/js/jquery-3.3.1.min.js"></script>
+<script src="/front/js/jquery-ui.js"></script>
+<script src="/front/js/popper.min.js"></script>
+<script src="/front/js/bootstrap.min.js"></script>
+<script src="/front/js/owl.carousel.min.js"></script>
+<script src="/front/js/jquery.magnific-popup.min.js"></script>
+<script src="/front/js/aos.js"></script>
+<script src="/front/js/main.js"></script>
+
+</body>
+</html>

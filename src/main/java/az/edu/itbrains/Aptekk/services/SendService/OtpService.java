@@ -1,0 +1,58 @@
+package az.edu.itbrains.Aptekk.services.SendService;
+
+
+import az.edu.itbrains.Aptekk.models.Otp;
+import az.edu.itbrains.Aptekk.repository.OtpRepository;
+import az.edu.itbrains.Aptekk.repository.UserRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.Random;
+
+@Service
+@RequiredArgsConstructor
+public class OtpService {
+
+    private final OtpRepository otpRepository;
+    private final EmailService emailService;
+    private final UserRepository userRepository;
+
+    @Transactional
+    public void generateAndSendOtp(String userEmail) {
+        otpRepository.findByUserEmail(userEmail).ifPresent(otpRepository::delete);
+
+        String otpCode = String.format("%06d", new Random().nextInt(999999));
+        LocalDateTime expiryTime = LocalDateTime.now().plusMinutes(5);
+
+        Otp otp = new Otp();
+        otp.setUserEmail(userEmail);
+        otp.setOtpCode(otpCode);
+        otp.setExpiryTime(expiryTime);
+
+        otpRepository.save(otp);
+
+        emailService.sendOtpEmail(userEmail, otpCode);
+    }
+
+    @Transactional
+    public boolean validateOtp(String userEmail, String otpCode) {
+
+        Optional<Otp> otpRecord = otpRepository.findByEmailAndCodeForValidation(userEmail, otpCode);
+
+        if (otpRecord.isPresent()) {
+            Otp otp = otpRecord.get();
+
+            if (otp.getExpiryTime().isAfter(LocalDateTime.now())) {
+                otpRepository.delete(otp);
+                return true;
+            } else {
+                otpRepository.delete(otp);
+                return false;
+            }
+        }
+        return false;
+    }
+}

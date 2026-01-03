@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="az" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>OTP Təsdiqləmə - Melisa Aptek</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="site-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="p-5 bg-white border text-center">
+                        <h2 class="h3 mb-3 text-black">Təsdiqləmə Kodu</h2>
+                        <p>Kod <strong th:text="${email}"></strong> adresinə göndərildi.</p>
+
+                        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                        <form th:action="@{/verify-otp}" method="post">
+                            <input type="hidden" name="email" th:value="${email}" />
+                            <div class="form-group">
+                                <input type="text" name="otpCode" class="form-control text-center"
+                                       placeholder="000000" maxlength="6"
+                                       style="letter-spacing: 10px; font-weight: bold; font-size: 22px;" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Təsdiqlə</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

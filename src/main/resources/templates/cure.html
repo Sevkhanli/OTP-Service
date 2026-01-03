@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Elementləri seç
+            const qtyInput = document.querySelector('.input-group input[type="text"]');
+            const minusBtn = document.querySelector('.js-btn-minus');
+            const plusBtn = document.querySelector('.js-btn-plus');
+
+                Qiymət göstərilən element (strong içindəki qiymət)
+            const priceElement = document.querySelector('p strong.text-primary.h4');
+
+            // Əsas qiyməti HTML-dən oxu (məsələn "$55.00" → 55.00)
+            let unitPriceText = priceElement.textContent.trim();
+            const unitPrice = parseFloat(unitPriceText.replace(/[^0-9.]/g, '')) || 0;
+
+            // Ümumi qiyməti yeniləyən funksiya
+            function updateTotalPrice() {
+                let quantity = parseInt(qtyInput.value) || 1;
+                if (quantity < 1) {
+                    quantity = 1;
+                    qtyInput.value = 1;
+                }
+
+                const total = quantity * unitPrice;
+                // Qiyməti orijinal formatda yenilə (məsələn $ ilə)
+                priceElement.textContent = '$' + total.toFixed(2);
+                // AZN istəyirsənsə belə dəyiş: priceElement.textContent = total.toFixed(2) + ' AZN';
+            }
+
+            // + düyməsi
+            plusBtn.addEventListener('click', function() {
+                qtyInput.value = (parseInt(qtyInput.value) || 1) + 1;
+                updateTotalPrice();
+            });
+
+            // - düyməsi
+            minusBtn.addEventListener('click', function() {
+                let qty = parseInt(qtyInput.value) || 1;
+                if (qty > 1) {
+                    qtyInput.value = qty - 1;
+                    updateTotalPrice();
+                }
+            });
+
+            // Əl ilə dəyişəndə (input)
+            qtyInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, ''); // yalnız rəqəm icazə ver
+                updateTotalPrice();
+            });
+
+            // Başlanğıc hesabla (səhifə yüklənəndə)
+            updateTotalPrice();
+        });
+    </script>
+
+<!--    <style>-->
+<!--        .btn-turquoise {-->
+<!--   background-color: #00d8e0; /* Turkuaz rəng */-->
+<!--   color: #000;               /* Qara mətn */-->
+<!--   border: none;-->
+<!--   padding: 10px 20px;-->
+<!--   font-size: 24px;-->
+<!--   font-weight: bold;-->
+<!--   border-radius: 6px;-->
+<!--   cursor: pointer;-->
+<!--   transition: background-color 0.3s ease;-->
+<!-- }-->
+
+<!-- .btn-turquoise:hover {-->
+<!--   background-color: #00c0c8; /* Hover üçün bir az tünd ton */-->
+<!-- }-->
+<!--    </style>-->
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content" class="bg-white p-0">
+    <div class="col-md-12 mb-0 breadcrumb">
+        <a href="index.html">Home</a> <span class="mx-2 mb-0">/</span> <a href="shop.html">Store</a>
+    </div>
+
+<!--<div class="bg-light py-3">-->
+<!--    <div class="container">-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-12 mb-0"><a href="index.html">Home</a> <span class="mx-2 mb-0">/</span> <a-->
+<!--                    href="shop.html">Store</a> <span class="mx-2 mb-0"></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div class="site-section">
+    <div class="container">
+        <div  th:each="cure : ${cures}"  class="row">
+            <div class="col-md-5 mr-auto">
+                <div class="border text-center">
+                    <img th:src="${cure.imageUrl}" alt="Image" class="img-fluid p-5">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h2 th:utext="${cure.title}" class="text-black">Ibuprofen Tablets, 200mg</h2>
+                <p th:utext="${cure.description}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur, vitae, explicabo? Incidunt facere, natus
+                    soluta dolores iusto! Molestiae expedita veritatis nesciunt doloremque sint asperiores fuga voluptas,
+                    distinctio, aperiam, ratione dolore.</p>
+
+
+                <p th:text="${cure.price}"><del>$95.00</del>  <strong class="text-primary h4">$55.00</strong></p>
+
+
+
+                <div class="mb-5">
+                    <div class="input-group mb-3" style="max-width: 220px;">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
+                        </div>
+                        <input type="text" class="form-control text-center" value="1" placeholder=""
+                               aria-label="Example text with button addon" aria-describedby="button-addon1">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
+                        </div>
+                    </div>
+
+                </div>
+                <p><a href="cart.html" class="buy-now btn btn-sm height-auto px-4 py-3 btn-primary">Kart Əlavə Et</a></p>
+
+                <div class="mt-5">
+                    <ul class="nav nav-pills mb-3 custom-pill" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
+                               aria-controls="pills-home" aria-selected="true">İstifadə qaydası</a>
+                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab"
+                               aria-controls="pills-profile" aria-selected="false">Tərkibi</a>
+                        </li>
+
+                    </ul>
+
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                            <table class="table custom-table">
+                                <thead>
+                                <td>
+                                                                <p th:utext="${cure.orderingInformation}" class="nav-link-1 active text-black" id="pills-home-tab-1" data-toggle="pill" href="#pills-home" role="tab"
+                                                                   aria-controls="pills-home" aria-selected="true">djcskncjdnc</p>
+
+                                </td>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+
+                            <table class="table custom-table">
+
+                                <tbody>
+                                <tr>
+                                                               <p th:utext="${cure.Specifications}" class="nav-link-1 text-black" id="pills-profile-tab-1" data-toggle="pill" href="#pills-profile" role="tab"
+                                                                aria-controls="pills-profile" aria-selected="false">Specifications</p>
+
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="site-section bg-secondary bg-image" style="background-image: url('images/bg_2.jpg');">
+    <div class="container">
+        <div class="row align-items-stretch">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <a href="#" class="banner-1 h-100 d-flex" style="background-image: url('images/bg_1.jpg');">
+                    <div class="banner-1-inner align-self-center">
+                        <h2>Pharma Products</h2>
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestiae ex ad minus rem odio voluptatem.
+                        </p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <a href="#" class="banner-1 h-100 d-flex" style="background-image: url('/front/images/bg_2.jpg');">
+                    <div class="banner-1-inner ml-auto  align-self-center">
+                        <h2>Rated by Experts</h2>
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestiae ex ad minus rem odio voluptatem.
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    // Range slider elementlərini seç
+const priceSlider = document.querySelector('input[type="range"]');
+const priceDisplay = document.querySelector('.price-display'); // qiymət göstərilən element
+const products = document.querySelectorAll('.product-item'); // bütün məhsullar
+
+// Slider dəyişəndə
+priceSlider.addEventListener('input', function() {
+    const maxPrice = this.value;
+
+    // Qiymət displayini yenilə
+    priceDisplay.textContent = `$0 - $${maxPrice}`;
+
+    // Məhsulları filtrələ
+    products.forEach(product => {
+        const productPrice = parseFloat(product.dataset.price); // məhsulun qiyməti
+
+        if (productPrice <= maxPrice) {
+            product.style.display = 'block'; // göstər
+        } else {
+            product.style.display = 'none'; // gizlət
+        }
+    });
+});
+
+</script>
+</body>
+</html>
